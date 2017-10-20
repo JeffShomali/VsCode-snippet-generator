@@ -1,14 +1,32 @@
 import React, { Component } from "react";
+import { html } from "common-tags";
 
 class Index extends Component {
   state = {
-    input: null,
+    snippet: null,
     trigger: null,
-    description: null
+    description: null,
+    clickCounter: false
   };
 
-  handleChange(event) {
-    this.setState({ input: event.target.value });
+  defaultSnippet() {
+    return html`
+      /* --------------------------------------------
+      Remove this comment and write your own snippet.
+      Then copy and code -> Preferences -> user snippet
+      to know how to use the place holder visit tge link below
+      https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets
+      ------------------------------------------------*/
+    `;
+  }
+
+  componentWillMount() {
+    let defaultSnippet = this.defaultSnippet();
+    this.setState({ snippet: defaultSnippet });
+  }
+
+  handleChange(e) {
+    this.setState({ snippet: e.target.value });
   }
 
   handleTrigger(e) {
@@ -19,9 +37,31 @@ class Index extends Component {
     this.setState({ description: e.target.value });
   }
 
+  handleButtonClick() {
+    this.setState({ clickCounter: true });
+  }
+
+  generateSnippet() {
+    const inputSnippet = this.state.snippet;
+    const lineStringArray = inputSnippet.replace(/"/g, '\\"').split("\n");
+    const count = lineStringArray.length - 1;
+    const outputSnippet = lineStringArray.map((endofline, iterator) => {
+      return iterator < count ? `"${endofline}",` : `"${endofline}"`;
+    });
+    // eslint-disable-next-line
+    return html`
+    "${this.state.description}": {
+      "prefix": "${this.state.trigger}",
+      "body": [
+        ${outputSnippet.join("\n")}
+      ],
+      "description": "${this.state.description}"
+    }
+  `;
+  }
+
   render() {
-    var htmlOutput = `${this.state.trigger}, ${this.state.description} \n ${this
-      .state.input}`;
+    const htmlOutput = this.generateSnippet();
 
     return (
       <div>
@@ -40,19 +80,20 @@ class Index extends Component {
         <textarea
           rows="10"
           cols="100"
-          value={this.state.input}
+          value={this.state.snippet}
           onChange={this.handleChange.bind(this)}
         >
-          {this.state.input}
+          {this.state.snippet}
         </textarea>
         <br />
         <br />
+        {this.state.clickCounter ? (
+          <textarea rows="10" cols="100" value={htmlOutput} readOnly />
+        ) : (
+          <button onClick={this.handleButtonClick.bind(this)}>Click me!</button>
+        )}
 
-        <textarea rows="10" cols="100" value={htmlOutput} />
-        <input
-          type="text"
-          value={`${this.state.trigger}, ${this.state.description}`}
-        />
+        <br />
       </div>
     );
   }
