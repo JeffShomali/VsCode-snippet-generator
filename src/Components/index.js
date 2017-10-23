@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { html } from "common-tags";
-
+import "./index.css";
 class Index extends Component {
   state = {
     snippet: null,
     trigger: null,
     description: null,
-    clickCounter: false
+    clickCounter: true
   };
 
   defaultSnippet() {
@@ -64,36 +64,49 @@ class Index extends Component {
     const htmlOutput = this.generateSnippet();
 
     return (
-      <div>
-        <h1>This is index page</h1>
+      <div className="row">
+        <header>This Is Index Page</header>
+
         <input
+          className="description_input"
           type="text"
           name="trigger"
           onChange={this.handleTrigger.bind(this)}
+          placeholder="RCC"
+          autofocus
         />
         <input
+          className="description_input"
           type="text"
           name="description"
           onChange={this.handleDescription.bind(this)}
+          placeholder="React Create Class"
         />
 
-        <textarea
-          rows="10"
-          cols="100"
-          value={this.state.snippet}
-          onChange={this.handleChange.bind(this)}
-        >
-          {this.state.snippet}
-        </textarea>
-        <br />
-        <br />
-        {this.state.clickCounter ? (
-          <textarea rows="10" cols="100" value={htmlOutput} readOnly />
-        ) : (
-          <button onClick={this.handleButtonClick.bind(this)}>Click me!</button>
-        )}
+        <div className="column_left">
+          <div id="input_textarea">
+            <textarea
+              rows="10"
+              cols="100"
+              value={this.state.snippet}
+              onChange={this.handleChange.bind(this)}
+            >
+              {this.state.snippet}
+            </textarea>
+          </div>
+        </div>
 
-        <br />
+        <div className="column_right">
+          <div id="output_textarea">
+            {this.state.clickCounter ? (
+              <textarea rows="10" cols="100" value={htmlOutput} readOnly />
+            ) : (
+              <button onClick={this.handleButtonClick.bind(this)}>
+                Click me!
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
