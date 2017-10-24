@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { html } from "common-tags";
+import brace from "brace";
+import AceEditor from "react-ace";
+
+import "brace/mode/javascript";
+import "brace/theme/solarized_dark";
 import "./index.css";
-class Index extends Component {
+
+class Ace extends Component {
   state = {
     snippet: null,
     trigger: null,
@@ -11,12 +17,12 @@ class Index extends Component {
 
   defaultSnippet() {
     return html`
-      /* --------------------------------------------
+      /* 
+
       Remove this comment and write your own snippet.
-      Then copy and code -> Preferences -> user snippet
-      to know how to use the place holder visit tge link below
-      https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets
-      ------------------------------------------------*/
+      Then copy and paste -> Preferences -> User Snippet.
+
+      */
     `;
   }
 
@@ -25,8 +31,8 @@ class Index extends Component {
     this.setState({ snippet: defaultSnippet });
   }
 
-  handleChange(e) {
-    this.setState({ snippet: e.target.value });
+  handleChange(newValue) {
+    this.setState({ snippet: newValue });
   }
 
   handleTrigger(e) {
@@ -48,7 +54,7 @@ class Index extends Component {
     const outputSnippet = lineStringArray.map((endofline, iterator) => {
       return iterator < count ? `"${endofline}",` : `"${endofline}"`;
     });
-    // eslint-disable-next-line
+
     return html`
     "${this.state.description}": {
       "prefix": "${this.state.trigger}",
@@ -62,54 +68,75 @@ class Index extends Component {
 
   render() {
     const htmlOutput = this.generateSnippet();
-
     return (
       <div className="row">
-        <header>This Is Index Page</header>
-
-        <input
-          className="description_input"
-          type="text"
-          name="trigger"
-          onChange={this.handleTrigger.bind(this)}
-          placeholder="RCC"
-          autofocus
-        />
-        <input
-          className="description_input"
-          type="text"
-          name="description"
-          onChange={this.handleDescription.bind(this)}
-          placeholder="React Create Class"
-        />
-
-        <div className="column_left">
-          <div id="input_textarea">
-            <textarea
-              rows="10"
-              cols="100"
-              value={this.state.snippet}
-              onChange={this.handleChange.bind(this)}
-            >
-              {this.state.snippet}
-            </textarea>
-          </div>
+        <div className="row">
+          <input
+            className="description_input"
+            type="text"
+            name="trigger"
+            onChange={this.handleTrigger.bind(this)}
+            placeholder="RCCC"
+            autoFocus
+          />
+          <input
+            className="description_input"
+            type="text"
+            name="description"
+            onChange={this.handleDescription.bind(this)}
+            placeholder="React Create Class Components"
+          />
         </div>
 
-        <div className="column_right">
-          <div id="output_textarea">
-            {this.state.clickCounter ? (
-              <textarea rows="10" cols="100" value={htmlOutput} readOnly />
-            ) : (
-              <button onClick={this.handleButtonClick.bind(this)}>
-                Click me!
-              </button>
-            )}
-          </div>
+        <div className="column">
+          <AceEditor
+            mode="javascript"
+            theme="solarized_dark"
+            height="1000px"
+            name="snippet"
+            onLoad={this.onLoad}
+            value={this.state.snippet}
+            onChange={this.handleChange.bind(this)}
+            fontSize={13}
+            showPrintMargin={false}
+            showGutter={true}
+            highlightActiveLine={true}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              showLineNumbers: true,
+              tabSize: 2
+            }}
+          />
+        </div>
+
+        <div className="column">
+          <AceEditor
+            mode="javascript"
+            theme="solarized_dark"
+            name="snippet"
+            height="1000px"
+            onLoad={this.onLoad}
+            value={htmlOutput}
+            onChange={this.handleChange.bind(this)}
+            fontSize={13}
+            showPrintMargin={false}
+            showGutter={true}
+            highlightActiveLine={true}
+            setOptions={{
+              enableBasicAutocompletion: false,
+              enableLiveAutocompletion: false,
+              enableSnippets: false,
+              showLineNumbers: true,
+              tabSize: 2
+            }}
+            readOnly
+          />
         </div>
       </div>
     );
   }
 }
 
-export default Index;
+export default Ace;
