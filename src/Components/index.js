@@ -89,7 +89,6 @@ class Ace extends Component {
             name="description"
             onChange={this.handleDescription.bind(this)}
             placeholder="React Create Class Components"
-            placeholder="RCCC"
             autoCapitalize="off"
             autoCorrect="off"
             spellCheck="off"
