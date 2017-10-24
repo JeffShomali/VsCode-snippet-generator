@@ -77,6 +77,10 @@ class Ace extends Component {
             name="trigger"
             onChange={this.handleTrigger.bind(this)}
             placeholder="RCCC"
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck="off"
+            autoComplete="off"
             autoFocus
           />
           <input
@@ -85,6 +89,11 @@ class Ace extends Component {
             name="description"
             onChange={this.handleDescription.bind(this)}
             placeholder="React Create Class Components"
+            placeholder="RCCC"
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck="off"
+            autoComplete="off"
           />
         </div>
 
@@ -92,6 +101,7 @@ class Ace extends Component {
           <AceEditor
             mode="javascript"
             theme="solarized_dark"
+            width="100%"
             height="1000px"
             name="snippet"
             onLoad={this.onLoad}
@@ -116,6 +126,7 @@ class Ace extends Component {
             mode="javascript"
             theme="solarized_dark"
             name="snippet"
+            width="100%"
             height="1000px"
             onLoad={this.onLoad}
             value={htmlOutput}
